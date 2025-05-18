@@ -5,14 +5,31 @@
  * - Open a browser tab at http://localhost:8787/ to see your worker in action
  * - Run `npm run deploy` to publish your worker
  *
- * Bind resources to your worker in `wrangler.jsonc`. After adding bindings, a type definition for the
+ * Bind resources to your worker in `wrangler.toml`. After adding bindings, a type definition for the
  * `Env` object can be regenerated with `npm run cf-typegen`.
  *
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
+import getRecentTrack from "./lib";
+
 export default {
-	async fetch(request, env, ctx): Promise<Response> {
-		return new Response('Hello World!');
+	async fetch(
+		request: Request<unknown, IncomingRequestCfProperties<unknown>>,
+		env: Env,
+		ctx: ExecutionContext,
+	): Promise<Response> {
+		const { searchParams } = new URL(request.url);
+
+		const user = searchParams.get("user");
+		if (!user) {
+			return Response.json(
+				{ error: "no user param specified" },
+				{ status: 400, statusText: "no user param specified" },
+			);
+		}
+
+		const recentTrackData = await getRecentTrack(user);
+		return Response.json(recentTrackData);
 	},
 } satisfies ExportedHandler<Env>;
