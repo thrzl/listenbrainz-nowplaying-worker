@@ -25,7 +25,9 @@ export default {
 		if (!user) {
 			return Response.json(
 				{ error: "no user param specified" },
-				{ status: 400, statusText: "no user param specified" },
+				{ status: 400, statusText: "no user param specified", headers: {
+					"Access-Control-Allow-Origin": "*"
+				} },
 			);
 		}
 
