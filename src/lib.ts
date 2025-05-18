@@ -70,10 +70,12 @@ async function getNowPlaying(user: string) {
 async function musicBrainzSearch(
   track: ListenBrainzRes["listens"][0]["track_metadata"],
 ): Promise<Track> {
+  console.debug("looking up ", track.track_name)
   const cachedResponse = await caches.default.match(
     new Request(`https://me/${sha256(JSON.stringify(track))}`),
   );
   if (cachedResponse) {
+    console.debug("found in cache!")
     return cachedResponse.json();
   }
   const cleaned_release_name = track.release_name
@@ -213,6 +215,7 @@ export default async function getRecentTrack(user: string): Promise<Track> {
   const recentTrackData = await getLastListen(user);
   const track = recentTrackData.listens[0].track_metadata;
   if (track.mbid_mapping.recording_mbid) {
+    console.debug("listenbrainz data is rich!")
     return {
       name: track.track_name,
       mbid: track.mbid_mapping.recording_mbid,
