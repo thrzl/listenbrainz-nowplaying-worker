@@ -72,7 +72,7 @@ async function musicBrainzSearch(
 ): Promise<Track> {
   console.debug("looking up ", track.track_name)
   const cachedResponse = await caches.default.match(
-    new Request(`https://me/${sha256(JSON.stringify(track))}`),
+    new Request(`${sha256(JSON.stringify(track))}`),
   );
   if (cachedResponse) {
     console.debug("found in cache!")
@@ -154,7 +154,7 @@ async function musicBrainzSearch(
     matched: true,
   };
   await caches.default.put(
-    new Request(`https://me/${sha256(JSON.stringify(track))}`),
+    new Request(`${sha256(JSON.stringify(track))}`),
     new Response(JSON.stringify(resBody)),
   );
   return resBody;
