@@ -129,6 +129,10 @@ async function musicBrainzSearch(
         release.media[0].format === "Digital Media",
     ) || matchedRecording?.releases[0];
 
+  if (!matchedRelease || !matchedRecording) {
+    return copOut
+  }
+
   if (
     matchedRelease?.title.toLowerCase() !==
     cleaned_release_name.toLowerCase() && // check for same title
