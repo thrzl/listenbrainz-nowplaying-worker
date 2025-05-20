@@ -221,7 +221,7 @@ export default async function getRecentTrack(user: string): Promise<Track> {
   if (track.mbid_mapping.recording_mbid) {
     console.debug("listenbrainz data is rich!")
     return {
-      name: track.track_name,
+      name: track.title,
       mbid: track.mbid_mapping.recording_mbid,
       release: {
         mbid: track.mbid_mapping.release_mbid,
